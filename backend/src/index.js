@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import {connectDB} from "./lib/db.js";
 
 import authRoute from "./routes/auth.route.js";
+import messageRoute from "./routes/message.route.js";
 
 const app = express();
 
@@ -16,6 +17,8 @@ app.use(cookieParser());
 
 //custom middlewares
 app.use("/api/auth", authRoute);
+app.use("/api/message", messageRoute);
+
 
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
