@@ -1,0 +1,4 @@
+.env
+mongodb atlas.txt
+node_modules/
+build/Release
