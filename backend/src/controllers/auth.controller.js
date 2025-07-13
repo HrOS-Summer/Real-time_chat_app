@@ -75,8 +75,9 @@ export const logout = (req, res) => {
         res.cookie("jwt", "", {
             maxAge: 0,
             httpOnly: true,
-            secure: process.env.NODE_ENV !== "developent", // only over HTTPS in production
-            sameSite: "Strict",
+            secure: process.env.NODE_ENV !== "development", // only over HTTPS in production
+            sameSite: "strict",
+            path: '/'
         })
         res.status(200).json({message: "Logged out successfully"});
     } catch (error) {
@@ -88,6 +89,7 @@ export const logout = (req, res) => {
 export const updateProfile = async (req, res) => {
     try {
         const {profilePic} = req.body;
+        const userId = req.user._id;
         if(!profilePic) return res.status(404).json({message: "Profile Picture is required"})
 
         const uploadResponse = await cloudinary.uploader.upload(profilePic);
