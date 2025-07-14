@@ -1,15 +1,25 @@
-import { Camera, Mail, User } from "lucide-react";
-import { useAuthStore } from "../store/useAuthStore"
 import { useState } from "react";
+import { useAuthStore } from "../store/useAuthStore";
+import { Camera, Mail, User } from "lucide-react";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const ProfilePage = () => {
-
-  const {authUser, isUpdatingProfile, updateProfile} = useAuthStore();
+  const { authUser, isUpdatingProfile, updateProfile, deleteProfile } = useAuthStore();
   const [selectedImg, setSelectedImg] = useState(null);
+
+  const navigate = useNavigate();
+
 
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
-    if(!file) return;
+    if (!file) return;
+
+    // Validate file size before compression (e.g., max 3MB)
+    if (file.size > 3 * 1024 * 1024) {
+        toast.error("Image size exceeds 3MB. Please choose a smaller image.");
+        return;
+    }
 
     const reader = new FileReader();
 
@@ -19,16 +29,27 @@ const ProfilePage = () => {
       const base64Image = reader.result;
       setSelectedImg(base64Image);
       await updateProfile({ profilePic: base64Image });
+    };
+  };
 
-    }
-  }
+  const handleDeleteProfile = async () => {
+      if (window.confirm("Are you sure you want to delete your profile? This action cannot be undone.")) {
+          try {
+              await deleteProfile();
+              toast.success("Profile deleted successfully");
+              navigate("/login");
+          } catch (error) {
+              toast.error(error.message || "Failed to delete profile");
+          }
+      }
+  };
 
   return (
     <div className="h-screen pt-20">
       <div className="max-w-2xl mx-auto p-4 py-8">
         <div className="bg-base-300 rounded-xl p-6 space-y-8">
           <div className="text-center">
-            <h1 className="text-2xl font-semibold">Profile</h1>
+            <h1 className="text-2xl font-semibold ">Profile</h1>
             <p className="mt-2">Your profile information</p>
           </div>
 
@@ -99,10 +120,19 @@ const ProfilePage = () => {
             </div>
           </div>
 
+          <div className="mt-6">
+              <button
+                  onClick={handleDeleteProfile}
+                  className="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-2.5 rounded-lg transition-all duration-200 cursor-pointer"
+                  disabled={isUpdatingProfile}
+              >
+                  Delete Profile
+              </button>
+          </div>
+
         </div>
       </div>
     </div>
-  )
-}
-
-export default ProfilePage
+  );
+};
+export default ProfilePage; 

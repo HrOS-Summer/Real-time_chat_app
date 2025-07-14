@@ -8,6 +8,10 @@ export const useAuthStore = create((set) => ({
     isLoggingIn: false,
     isUpdatingProfile: false,
     isCheckingAuth: true,
+    isDeletingProfile: false,
+    isRequestingReset: false,
+    isResettingPassword: false,
+    onlineUsers: [],
 
     checkAuth: async() => {
         try {
@@ -82,5 +86,45 @@ export const useAuthStore = create((set) => ({
         } finally {
             set({ isUpdatingProfile: false });
         }
-    }
+    },
+
+    deleteProfile: async () => {
+        set({ isDeletingProfile: true });
+        try {
+            await axiosInstance.delete("/auth/delete-profile");
+            set({ authUser: null });
+            toast.success("Profile deleted successfully");
+        } catch (error) {
+            console.error("Error in delete profile:", error.response?.data || error);
+            throw new Error(error.response?.data?.message || "Failed to delete profile");
+        } finally {
+            set({ isDeletingProfile: false });
+        }
+    },
+
+    forgotPassword: async (email) => {
+        set({ isRequestingReset: true });
+        try {
+            await axiosInstance.post("/auth/forgot-password", { email });
+            toast.success("Password reset email sent. Check your inbox.");
+        } catch (error) {
+            console.error("Error in forgot password:", error.response?.data || error);
+            toast.error(error.response?.data?.message || "Failed to send reset email");
+        } finally {
+            set({ isRequestingReset: false });
+        }
+    },
+
+    resetPassword: async (token, password) => {
+        set({ isResettingPassword: true });
+        try {
+            await axiosInstance.post(`/auth/reset-password/${token}`, { password });
+            toast.success("Password reset successfully. Please log in.");
+        } catch (error) {
+            console.error("Error in reset password:", error.response?.data || error);
+            toast.error(error.response?.data?.message || "Failed to reset password");
+        } finally {
+            set({ isResettingPassword: false });
+        }
+    },
 }));

@@ -13,7 +13,9 @@ const app = express();
 dotenv.config();
 
 //express middlewares
-app.use(express.json())
+
+// Increase payload size limit to 10MB (for profileImage)
+app.use(express.json({limit: "3mb"}))
 app.use(cookieParser());
 app.use(cors({
     origin: "http://localhost:5173",
@@ -22,7 +24,7 @@ app.use(cors({
 
 //custom middlewares
 app.use("/api/auth", authRoute);
-app.use("/api/message", messageRoute);
+app.use("/api/messages", messageRoute);
 
 
 const PORT = process.env.PORT;

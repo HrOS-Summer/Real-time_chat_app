@@ -31,8 +31,8 @@ const LoginPage = () => {
                 <div className="size-12 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
                   <MessageSquare className='size-6 text-primary' />
                 </div>
-                <h1 className="text-2xl font-bold mt-2">Login to your account</h1>
-                <p className="text-base-content/60">Get started with your free account</p>
+                <h1 className="text-2xl font-bold mt-2">Welcome Back</h1>
+                <p className="text-base-content/60">Sign in to your account</p>
               </div>
             </div>
     
@@ -48,7 +48,7 @@ const LoginPage = () => {
                   </div>
                   <input 
                     type='email'
-                    className={`input input-bordered w-full pl-10`}
+                    className="input input-bordered w-full pl-10"
                     placeholder='john.doe@example.com'
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value})}
@@ -66,7 +66,7 @@ const LoginPage = () => {
                   </div>
                   <input 
                     type={showPassword ? 'text' : 'password'}
-                    className={`input input-bordered w-full pl-10 pr-10`}
+                    className="input input-bordered w-full pl-10 pr-10"
                     value={formData.password}
                     onChange={(e) => setFormData({ ...formData, password: e.target.value})}
                   />
@@ -82,6 +82,13 @@ const LoginPage = () => {
                     )}
                   </button>
                 </div>
+
+                <div className="text-right mt-2">
+                    <Link to="/forgot-password" className="text-sm text-primary hover:underline">
+                        Forgot Password?
+                    </Link>
+                </div>
+
               </div>
     
               <button type="submit" className='btn btn-primary w-full' disabled={isLoggingIn}>
@@ -108,8 +115,8 @@ const LoginPage = () => {
         {/* right-side */}
     
         <AuthImagePattern
-          title="Login to explore the community"
-          subtitle="Connect with friends, share moments, and stay in touch with your community through our platform."
+          title="Welcome back!"
+          subtitle="Sign in to continue your conversations and catch up with your messages."
         />
       </div>
   )

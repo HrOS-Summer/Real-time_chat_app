@@ -6,6 +6,8 @@ import ProfilePage from './pages/ProfilePage'
 import LoginPage from './pages/LoginPage'
 import SignUpPage from './pages/SignUpPage'
 import SettingsPage from './pages/SettingsPage'
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 import { useAuthStore } from './store/useAuthStore'
 import { useEffect } from 'react'
 import { Loader } from "lucide-react";
@@ -39,6 +41,9 @@ function App() {
         <Route path='/signup' element={!authUser ? <SignUpPage /> : <Navigate to="/" />}/>
         
         <Route path='/profile' element={authUser ? <ProfilePage /> : <Navigate to="/login" />}/>
+
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password/:token" element={<ResetPassword />} />
       </Routes>
       <Toaster />
     </div>
